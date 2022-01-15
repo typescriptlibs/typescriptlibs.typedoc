@@ -1,12 +1,12 @@
 {
   "name": "typescriptlibs.typedoc",
-  "description": "Create api documentation for TSL projects.",
+  "description": "Modified documentation generator for TSL projects.",
   "version": "0.19.3",
   "homepage": "https://github.com/typescriptlibs/typescriptlibs.typedoc",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "bin": {
-    "typedoc": "bin/typedoc"
+    "tsl-typedoc": "bin/typedoc"
   },
   "license": "Apache-2.0",
   "repository": {

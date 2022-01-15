@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug in TypeDoc
+about: Report a bug in TypeScriptLibs.TypeDoc
 labels: bug
 ---
 
@@ -14,10 +14,10 @@ to TypeDoc not working.
 <!-- Include keywords that might help others with the same problem find this issue -->
 
 ## Expected Behavior
-<!-- How did you expect Typedoc to work? -->
+<!-- How did you expect TypeDoc to work? -->
 
 ## Actual Behavior
-<!-- What does Typedoc fail to do? -->
+<!-- What does TypeDoc fail to do? -->
 
 ## Steps to reproduce the bug
 <!--
@@ -31,7 +31,7 @@ If this is not possible, include at least:
 -->
 
 ## Environment
-- Typedoc version:
+- TypeDoc version:
 - TypeScript version:
 - Node.js version:
 - OS:

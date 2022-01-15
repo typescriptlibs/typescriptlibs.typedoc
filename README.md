@@ -1,38 +1,16 @@
 # TypeDoc for TypeScriptLibs.org
 
-> Documentation generator as a modified old version for TSL projects.
-
-
-
-## Documentation
-
-Visit the TypeDoc website for latest documentation:
-* [https://typedoc.org](https://typedoc.org).
-
-There you can find:
-* An [installation guide](https://typedoc.org/guides/installation/) explaining how to use typedoc from the cli, webpack,
-  grunt, or gulp.
-* There are additional guides explaining how to extend typedoc using
-  - [plugins](https://typedoc.org/guides/plugins/) and
-  - [themes](https://typedoc.org/guides/themes/).
+> Modified documentation generator for TSL projects.
 
 
 
 ## Installation
 
-TypeDoc runs on Node.js and is available as an NPM package. You can install TypeDoc in your project's directory as
+TypeScriptLibs.TypeDoc runs on Node.js and is available as an NPM package. You can install it in your project-folder as
 usual:
 
 ```bash
-$ npm install typedoc --save-dev
-```
-
-Like the TypeScript compiler, TypeDoc comes with a binary that can be called from anywhere if you install TypeDoc as a
-global module. The name of the executable is ``typedoc``.
-
-```bash
-$ npm install typedoc --global
-$ typedoc
+$ npm install github:typescriptlibs/typescriptlibs.typedoc --save-dev
 ```
 
 
@@ -42,19 +20,18 @@ $ typedoc
 
 ### Shell
 
-TypeDoc accepts most of the command line arguments that the TypeScript compiler accepts. One major difference is the
-fact that one may pass an entire directory instead of individual files to the documentation generator. So in order to
-create a documentation for an entire project you simply type:
+TypeScriptLibs.TypeDoc accepts most of the command line arguments that the TypeScript compiler accepts. One major
+difference is the fact that one may pass an entire directory instead of individual files to the documentation generator.
+So in order to create a documentation for an entire project you simply type:
 
 ```bash
-$ typedoc --out path/to/documentation/ path/to/typescript/project/
+$ npx tsl-typedoc --out path/to/documentation/ path/to/typescript/project/
 ```
 
 
 ### Arguments
 
-For a complete list of the command line arguments run `typedoc --help` or visit
-[our website](https://typedoc.org/guides/options/).
+For a complete list of the command line arguments run `tsl-typedoc --help`.
 
 * `--out <path/to/documentation/>`<br>
   Specifies the location the documentation should be written to. Defaults to `./docs`
@@ -110,16 +87,6 @@ For a complete list of the command line arguments run `typedoc --help` or visit
   Display the version number of TypeDoc.
 * `--help`<br>
   Display all TypeDoc options.
-
-
-
-## Contributing
-
-This project is maintained by a community of developers. Contributions are welcome and appreciated. You can find TypeDoc
-on GitHub; feel free to start an issue or create a pull requests:<br>
-[https://github.com/TypeStrong/typedoc](https://github.com/TypeStrong/typedoc)
-
-For more information, read the [contribution guide](https://github.com/TypeStrong/typedoc/blob/master/CONTRIBUTING.md).
 
 
 
