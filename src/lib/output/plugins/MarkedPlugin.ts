@@ -1,8 +1,8 @@
 import * as FS from 'fs-extra';
-import * as Path from 'path';
-import * as Marked from 'marked';
-import * as HighlightJS from 'highlight.js';
 import * as Handlebars from 'handlebars';
+import HighlightJS from 'highlight.js';
+import { marked as Marked } from 'marked';
+import * as Path from 'path';
 
 import { Component, ContextAwareRendererComponent } from '../components';
 import { RendererEvent, MarkdownEvent } from '../events';
