@@ -1,30 +1,31 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "inlineSources": true, // Required for debugging NPM published package.
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "outDir": "dist/",
+    "rootDir": "src/",
     "module": "commonjs",
+    "newLine": "LF",
+    "target": "es2015",
     "lib": [
       "es5",
       "es2015.core",
       "es2015.collection",
       "es2015.iterable",
       "es2016.array.include" // Supported by Node 6+
-    ],
-    "target": "es2015",
-    "noImplicitAny": false,
-    "downlevelIteration": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "removeComments": true,
-    "noUnusedLocals": true,
-    "preserveConstEnums": true,
-    "declaration": true,
-    "sourceMap": true,
-    "inlineSources": true, // Required for debugging NPM published package.
-    "outDir": "dist/",
-    "rootDir": "src/",
-    "experimentalDecorators": true,
-    "newLine": "LF",
-    "resolveJsonModule": true
+    ]
   },
   "include": [
     "src/**/*.ts"
