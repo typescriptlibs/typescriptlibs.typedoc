@@ -1,6 +1,6 @@
 # TypeDoc for TypeScriptLibs.org
 
-> Modified documentation generator for TSL projects.
+Modified documentation generator for TSL projects.
 
 
 
