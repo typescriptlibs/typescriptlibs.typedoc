@@ -56,7 +56,7 @@
     "dist",
     "!dist/test",
     "tasks",
-    "LICENSE"
+    "LICENSE.txt"
   ],
   "scripts": {
     "pretest": "node scripts/copy_test_files.js",
