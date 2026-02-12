@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 import { Application } from '../application';
 import { EventDispatcher, Event, EventMap } from './events';
 import { DeclarationOption } from './options/declaration';
@@ -188,7 +186,7 @@ export abstract class ChildableComponent<O extends ComponentHost, C extends Comp
     constructor(owner: O | typeof DUMMY_APPLICATION_OWNER) {
         super(owner);
 
-        _.entries(this._defaultComponents || {}).forEach(([name, component]) => {
+        Object.entries(this._defaultComponents || {}).forEach(([name, component]) => {
             this.addComponent(name, component);
         });
     }
@@ -203,7 +201,7 @@ export abstract class ChildableComponent<O extends ComponentHost, C extends Comp
     }
 
     getComponents(): C[] {
-        return _.values(this._componentChildren);
+        return Object.values(this._componentChildren || {});
     }
 
     hasComponent(name: string): boolean {
@@ -244,7 +242,7 @@ export abstract class ChildableComponent<O extends ComponentHost, C extends Comp
     }
 
     removeAllComponents() {
-        for (const component of _.values(this._componentChildren)) {
+        for (const component of Object.values(this._componentChildren || {})) {
             component.stopListening();
         }
 

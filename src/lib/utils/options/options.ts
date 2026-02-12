@@ -1,5 +1,4 @@
 import { isDeepStrictEqual } from 'util';
-import * as _ from 'lodash';
 import * as ts from 'typescript';
 
 import { DeclarationOption, ParameterScope, ParameterType, convert, TypeDocOptions, KeyToDeclaration, TypeDocAndTSOptions, TypeDocOptionMap } from './declaration';
@@ -215,7 +214,7 @@ export class Options {
      * @param scope
      */
     getDeclarationsByScope(scope: ParameterScope) {
-        return _.uniq(Array.from(this._declarations.values()))
+        return [...new Set(Array.from(this._declarations.values()))]
             .filter(declaration => (declaration.scope ?? ParameterScope.TypeDoc) === scope);
     }
 
@@ -234,7 +233,7 @@ export class Options {
      * Gets all of the TypeDoc option values defined in this option container.
      */
     getRawValues(): Partial<TypeDocOptions> {
-        return _.cloneDeep(this._values);
+        return structuredClone(this._values);
     }
 
     /**
@@ -260,7 +259,7 @@ export class Options {
      * Gets the set compiler options.
      */
     getCompilerOptions(): ts.CompilerOptions {
-        return _.cloneDeep(this._compilerOptions);
+        return structuredClone(this._compilerOptions);
     }
 
     /**

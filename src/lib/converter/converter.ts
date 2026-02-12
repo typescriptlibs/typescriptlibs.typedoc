@@ -1,6 +1,5 @@
 import * as ts from 'typescript';
 import * as _ts from '../ts-internal';
-import * as _ from 'lodash';
 
 import { Application } from '../application';
 import { Reflection, Type, ProjectReflection } from '../models/index';
@@ -25,6 +24,15 @@ export interface ConverterResult {
      */
     project: ProjectReflection;
 }
+
+const zip = (...arrays) => {
+  // Find the shortest array length to prevent zipping undefined values
+  const minLength = Math.min(...arrays.map(arr => arr.length));
+  
+  return Array.from({ length: minLength }, (_, index) => {
+    return arrays.map(arr => arr[index]);
+  });
+};
 
 /**
  * Compiles source files using TypeScript and converts compiler symbols to reflections.
@@ -216,7 +224,7 @@ export class Converter extends ChildableComponent<Application, ConverterComponen
 
     private removeNodeConverter(converter: ConverterNodeComponent<any>) {
         const converters = this.nodeConverters;
-        const keys = _.keys(this.nodeConverters);
+        const keys = Object.keys(this.nodeConverters);
         for (const key of keys) {
             if (converters[key] === converter) {
                 delete converters[key];
@@ -346,7 +354,7 @@ export class Converter extends ChildableComponent<Application, ConverterComponen
      */
     convertTypes(context: Context, nodes: ReadonlyArray<ts.Node> = [], types: ReadonlyArray<ts.Type> = []): Type[] {
         const result: Type[] = [];
-        _.zip(nodes, types).forEach(([node, type]) => {
+        zip(nodes, types).forEach(([node, type]) => {
             const converted = this.convertType(context, node, type);
             if (converted) {
                 result.push(converted);

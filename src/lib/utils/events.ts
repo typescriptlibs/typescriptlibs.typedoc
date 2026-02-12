@@ -7,8 +7,6 @@
 // The Events object is a typesafe conversion of Backbones Events object:
 // https://github.com/jashkenas/backbone/blob/05fde9e201f7e2137796663081105cd6dad12a98/backbone.js#L119-L374
 
-import * as _ from 'lodash';
-
 export interface EventCallback extends Function {
     _callback?: Function;
 }
@@ -69,7 +67,7 @@ const eventSplitter = /\s+/;
  * space-separated events `"change blur", callback` and jQuery-style event
  * maps `{event: callback}`).
  */
-function eventsApi<T, U>(
+function eventsApi<T extends object, U>(
     iteratee: EventIteratee<T, U>,
     events: U, name: EventMap | string | undefined,
     callback: EventCallback | undefined,
@@ -82,7 +80,7 @@ function eventsApi<T, U>(
             options['context'] = callback;
         }
 
-        for (names = _.keys(name); i < names.length ; i++) {
+        for (names = Object.keys(name); i < names.length ; i++) {
             events = eventsApi(iteratee, events, names[i], name[names[i]], options);
         }
     // tslint:disable-next-line:strict-type-predicates
@@ -137,7 +135,7 @@ function offApi(events: EventHandlers | undefined, name: string, callback: Event
 
     // Delete all events listeners and "drop" events.
     if (!name && !callback && !context) {
-        const ids = _.keys(listeners);
+        const ids = Object.keys(listeners);
         for (; i < ids.length; i++) {
             listening = listeners[ids[i]];
             delete listeners[listening.id];
@@ -146,7 +144,7 @@ function offApi(events: EventHandlers | undefined, name: string, callback: Event
         return;
     }
 
-    const names = name ? [name] : _.keys(events);
+    const names = name ? [name] : Object.keys(events);
     for (; i < names.length; i++) {
         name = names[i];
         const handlers = events[name];
@@ -183,10 +181,23 @@ function offApi(events: EventHandlers | undefined, name: string, callback: Event
         }
     }
 
-    if (_.size(events)) {
+    if (Object.keys(events).length) {
         return events;
     }
 }
+
+function once(fn) {
+  let called = false;
+  let result;
+  return (...args) => {
+    if (!called) {
+      called = true;
+      // Use apply to ensure correct context (this) and arguments are passed
+      result = fn.apply(this, args); 
+    }
+    return result;
+  };
+};
 
 /**
  * Reduces the event callbacks into a map of `{event: onceWrapper`.}
@@ -194,12 +205,12 @@ function offApi(events: EventHandlers | undefined, name: string, callback: Event
  */
 function onceMap(map: EventMap, name: string, callback: EventCallback | undefined, offer: Function): EventMap {
     if (callback) {
-        const once = map[name] = <EventCallback> _.once(function() {
-            offer(name, once);
+        const oncee = map[name] = <EventCallback> once(function() {
+            offer(name, oncee);
             callback.apply(this, arguments);
         });
 
-        once._callback = callback;
+        oncee._callback = callback;
     }
 
     return map;
@@ -240,6 +251,16 @@ function triggerEvents(events: EventHandler[], args: any[]) {
         case 3: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); } return;
         default: while (++i < l) { (ev = events[i]).callback.apply(ev.ctx, args); } return;
     }
+}
+
+const uniqueIdCounter = {};
+
+function uniqueId(prefix = 'uid-') {
+  if (!uniqueIdCounter[prefix]) {
+    uniqueIdCounter[prefix] = 0;
+  }
+  const id = ++uniqueIdCounter[prefix];
+  return `${prefix}${id}`;
 }
 
 /**
@@ -330,7 +351,7 @@ export class EventDispatcher {
      * A unique id that identifies this instance.
      */
     private get _listenId(): string {
-        return this._savedListenId || (this._savedListenId = _.uniqueId('l'));
+        return this._savedListenId || (this._savedListenId = uniqueId('l'));
     }
     private _savedListenId?: string;
 
@@ -373,7 +394,7 @@ export class EventDispatcher {
     once(name: string, callback: EventCallback, context?: any, priority?: any);
     once(name: EventMap|string, callback?: EventCallback, context?: any, priority?: number) {
         // Map the event into a `{event: once}` object.
-        const events = eventsApi(onceMap, <EventMap> {}, name, callback, _.bind(this.off, this));
+        const events = eventsApi(onceMap, <EventMap> {}, name, callback, Function.bind(this.off, this));
         return this.on(events, void 0, context, priority);
     }
 
@@ -437,7 +458,7 @@ export class EventDispatcher {
     listenToOnce(obj: EventDispatcher, name: string, callback: EventCallback, priority?: number);
     listenToOnce(obj: EventDispatcher, name: EventMap|string, callback?: EventCallback, priority?: number) {
         // Map the event into a `{event: once}` object.
-        const events = eventsApi(onceMap, <EventMap> {}, name, callback, _.bind(this.stopListening, this, obj));
+        const events = eventsApi(onceMap, <EventMap> {}, name, callback, Function.bind(this.stopListening, this, obj));
         return this.listenTo(obj, events, void 0, priority);
     }
 
@@ -451,7 +472,7 @@ export class EventDispatcher {
             return this;
         }
 
-        const ids = obj ? [obj._listenId] : _.keys(listeningTo);
+        const ids = obj ? [obj._listenId] : Object.keys(listeningTo);
         for (let i = 0; i < ids.length; i++) {
             const listening = listeningTo[ids[i]];
 
@@ -464,7 +485,7 @@ export class EventDispatcher {
             listening.obj.off(name, callback, this);
         }
 
-        if (_.isEmpty(listeningTo)) {
+        if (!Object.keys(listeningTo).length) {
             this._listeningTo = void 0;
         }
 

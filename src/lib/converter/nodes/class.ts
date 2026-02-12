@@ -5,7 +5,6 @@ import { Reflection, ReflectionFlag, ReflectionKind, DeclarationReflection } fro
 import { createDeclaration } from '../factories/index';
 import { Context } from '../context';
 import { Component, ConverterNodeComponent } from '../components';
-import { toArray } from 'lodash';
 import { getTypeArgumentsWithDefaults, getTypeParametersOfType } from '../utils/types';
 
 @Component({name: 'node:class'})
@@ -48,7 +47,7 @@ export class ClassConverter extends ConverterNodeComponent<ts.ClassDeclaration> 
                 });
             }
 
-            const extendsClause = toArray(node.heritageClauses).find(h => h.token === ts.SyntaxKind.ExtendsKeyword);
+            const extendsClause = Array.from(node.heritageClauses || []).find(h => h.token === ts.SyntaxKind.ExtendsKeyword);
             if (extendsClause) {
                 const baseType = extendsClause.types[0];
                 const type = context.getTypeAtLocation(baseType);
@@ -88,7 +87,7 @@ export class ClassConverter extends ConverterNodeComponent<ts.ClassDeclaration> 
                 }
             }
 
-            const implementsClause = toArray(node.heritageClauses).find(h => h.token === ts.SyntaxKind.ImplementsKeyword);
+            const implementsClause = Array.from(node.heritageClauses || []).find(h => h.token === ts.SyntaxKind.ImplementsKeyword);
             if (implementsClause) {
                 const implemented = this.owner.convertTypes(context, implementsClause.types);
                 reflection!.implementedTypes = (reflection!.implementedTypes || []).concat(implemented);

@@ -1,7 +1,6 @@
 import * as Path from 'path';
 import { Minimatch } from 'minimatch';
 
-import isEqual = require('lodash/isEqual');
 import Assert = require('assert');
 
 import { createMinimatch } from '../../lib/utils/paths';
@@ -30,7 +29,7 @@ describe('Paths', () => {
         '**/arbitrary/path/**'
       ];
 
-      Assert(isEqual(patterns, comparePaths), `Patterns have been altered:\nMMS: ${patterns}\nPaths: ${comparePaths}`);
+      Assert(Assert.strictEqual(JSON.stringify(patterns), JSON.stringify(comparePaths)), `Patterns have been altered:\nMMS: ${patterns}\nPaths: ${comparePaths}`);
 
       Assert(mms[0].match(absolutePath('/unix/absolute/some/sub/dir/path')), 'Din\'t match unix path');
       Assert(mms[1].match(absolutePath('/windows/alternative/absolute/path')), 'Din\'t match windows alternative path');
@@ -44,7 +43,7 @@ describe('Paths', () => {
       const mms = createMinimatch(paths);
       const patterns = mms.map(({ pattern }) => pattern);
 
-      Assert(isEqual(patterns, absPaths), `Project root have not been added to paths:\nMMS: ${patterns}\nPaths: ${absPaths}`);
+      Assert(Assert.strictEqual(JSON.stringify(patterns), JSON.stringify(absPaths)), `Project root have not been added to paths:\nMMS: ${patterns}\nPaths: ${absPaths}`);
 
       Assert(mms[0].match(Path.resolve('relative/some/sub/dir/path')), 'Din\'t match relative path');
       Assert(mms[1].match(Path.resolve('../parent/dir/path')), 'Din\'t match parent path');

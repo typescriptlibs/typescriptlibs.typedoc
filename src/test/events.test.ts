@@ -8,7 +8,6 @@
 // https://github.com/jashkenas/backbone/blob/6b927eb5e7081af16f97d9c15e34b030624a68f9/test/events.js
 
 import Assert = require('assert');
-import * as _ from 'lodash';
 import { EventDispatcher, Event } from '../lib/utils/events';
 
 class Events extends EventDispatcher {
@@ -16,6 +15,16 @@ class Events extends EventDispatcher {
     counterA = 0;
     counterB = 0;
 }
+function debounce(func, wait) {
+  let timeout;
+  return (...args) => {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+    }, wait);
+  };
+};
 
 describe('Events', function () {
     it('on and trigger', function () {
@@ -284,24 +293,24 @@ describe('Events', function () {
         b.on('event', fn);
 
         a.listenTo(b, 'event', fn).stopListening();
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn).stopListening(b);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn).stopListening(b, 'event');
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn).stopListening(b, 'event', fn);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
     });
 
     it('stopListening cleans up references from listenToOnce', function () {
@@ -311,24 +320,24 @@ describe('Events', function () {
         b.on('event', fn);
 
         a.listenToOnce(b, 'event', fn).stopListening();
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenToOnce(b, 'event', fn).stopListening(b);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenToOnce(b, 'event', fn).stopListening(b, 'event');
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenToOnce(b, 'event', fn).stopListening(b, 'event', fn);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._events.event), 1);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._events.event).length, 1);
+        Assert.equal(Object.keys(b._listeners).length, 0);
     });
 
     it('listenTo and off cleaning up references', function () {
@@ -338,23 +347,23 @@ describe('Events', function () {
 
         a.listenTo(b, 'event', fn);
         b.off();
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn);
         b.off('event');
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn);
         b.off(null, fn);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._listeners).length, 0);
 
         a.listenTo(b, 'event', fn);
         b.off(null, null, a);
-        Assert.equal(_.size(a._listeningTo), 0);
-        Assert.equal(_.size(b._listeners), 0);
+        Assert.equal(Object.keys(a._listeningTo).length, 0);
+        Assert.equal(Object.keys(b._listeners).length, 0);
     });
 
     it('listenTo and stopListening cleaning up references', function () {
@@ -372,7 +381,7 @@ describe('Events', function () {
         a.stopListening(b, 'other');
         a.stopListening(b, 'all');
 
-        Assert.equal(_.size((<any> a)._listeningTo), 0);
+        Assert.equal(Object.keys((<any> a)._listeningTo).length, 0);
     });
 
     it('listenToOnce without context cleans up references after the event has fired', function () {
@@ -382,7 +391,7 @@ describe('Events', function () {
             Assert(true);
         });
         b.trigger('anything');
-        Assert.equal(_.size((<any> a)._listeningTo), 0);
+        Assert.equal(Object.keys((<any> a)._listeningTo).length, 0);
     });
 
     it('listenToOnce with event maps cleans up references', function () {
@@ -397,7 +406,7 @@ describe('Events', function () {
             }
         });
         b.trigger('one');
-        Assert.equal(_.size((<any> a)._listeningTo), 1);
+        Assert.equal(Object.keys((<any> a)._listeningTo).length, 1);
     });
 
     it('listenToOnce with event maps binds the correct `this`', function () {
@@ -717,7 +726,7 @@ describe('Events', function () {
     });
 
     it('once with asynchronous events', function (done) {
-        const func = _.debounce(function () {
+        const func = debounce(function () {
             Assert(true);
             done();
         }, 50);

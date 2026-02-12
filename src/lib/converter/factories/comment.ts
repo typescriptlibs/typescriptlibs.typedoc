@@ -1,5 +1,4 @@
 import * as ts from 'typescript';
-import { toArray } from 'lodash';
 
 import { Comment, CommentTag } from '../../models/comments/index';
 
@@ -72,9 +71,9 @@ function getJSDocCommentRanges(node: ts.Node, text: string): ts.CommentRange[] {
         ts.SyntaxKind.ParenthesizedExpression
     ].includes(node.kind);
 
-    let commentRanges = toArray(ts.getLeadingCommentRanges(text, node.pos));
+    let commentRanges = Array.from(ts.getLeadingCommentRanges(text, node.pos) || []);
     if (hasTrailingCommentRanges) {
-        commentRanges = toArray(ts.getTrailingCommentRanges(text, node.pos)).concat(commentRanges);
+        commentRanges = Array.from(ts.getTrailingCommentRanges(text, node.pos) || []).concat(commentRanges);
     }
 
     // True if the comment starts with '/**' but not if it is '/**/'

@@ -3,7 +3,6 @@ import { Reflection, TypeContainer, TypeParameterContainer, TraverseProperty, Tr
 import { ContainerReflection } from './container';
 import { ParameterReflection } from './parameter';
 import { TypeParameterReflection } from './type-parameter';
-import { toArray } from 'lodash';
 
 export class SignatureReflection extends Reflection implements TypeContainer, TypeParameterContainer {
     parent?: ContainerReflection;
@@ -63,13 +62,13 @@ export class SignatureReflection extends Reflection implements TypeContainer, Ty
             }
         }
 
-        for (const parameter of toArray(this.typeParameters)) {
+        for (const parameter of Array.from(this.typeParameters || [])) {
             if (callback(parameter, TraverseProperty.TypeParameter) === false) {
                 return;
             }
         }
 
-        for (const parameter of toArray(this.parameters)) {
+        for (const parameter of Array.from(this.parameters || [])) {
             if (callback(parameter, TraverseProperty.Parameters) === false) {
                 return;
             }
