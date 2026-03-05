@@ -16,7 +16,6 @@ import { Renderer } from './output/renderer';
 import { Serializer } from './serialization';
 import { ProjectReflection } from './models/index';
 import { Logger, ConsoleLogger, CallbackLogger, PluginHost, writeFile, readFile } from './utils/index';
-import { createMinimatch } from './utils/paths';
 
 import {
     AbstractComponent,
@@ -285,10 +284,8 @@ export class Application extends ChildableComponent<
     public expandInputFiles(inputFiles: string[] = []): string[] {
         const files: string[] = [];
 
-        const exclude = this.exclude ? createMinimatch(this.exclude) : [];
-
-        function isExcluded(fileName: string): boolean {
-            return exclude.some(mm => mm.match(fileName));
+        const isExcluded = (fileName: string): boolean => {
+            return fileName.includes('node_modules');
         }
 
         const includeJson = this.options.getCompilerOptions().resolveJsonModule;

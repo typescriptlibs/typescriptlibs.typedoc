@@ -49,9 +49,6 @@ For a complete list of the command line arguments run `tsl-typedoc --help`.
 
 #### Source file handling
 
-* `--exclude <pattern>`<br>
-  Exclude files by the given pattern when a path is provided as source. Supports standard minimatch patterns
-  (see [#170](https://github.com/TypeStrong/typedoc/issues/170))
 * `--includeDeclarations`<br>
   Turn on parsing of .d.ts declaration files.
 * `--excludeExternals`<br>

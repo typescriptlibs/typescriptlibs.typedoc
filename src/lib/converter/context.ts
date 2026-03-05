@@ -1,8 +1,6 @@
 import * as ts from 'typescript';
-import { IMinimatch } from 'minimatch';
 
 import { Logger } from '../utils/loggers';
-import { createMinimatch } from '../utils/paths';
 import { Reflection, ProjectReflection, ContainerReflection, Type } from '../models/index';
 
 import { createTypeParameter } from './factories/type-parameter';
@@ -88,11 +86,6 @@ export class Context {
     visitStack: ts.Node[];
 
     /**
-     * The pattern that should be used to flag external source files.
-     */
-    private externalPattern?: Array<IMinimatch>;
-
-    /**
      * Create a new Context instance.
      *
      * @param converter  The converter instance that has created the context.
@@ -109,10 +102,6 @@ export class Context {
         const project = new ProjectReflection(converter.name);
         this.project = project;
         this.scope = project;
-
-        if (converter.externalPattern) {
-            this.externalPattern = createMinimatch(converter.externalPattern);
-        }
     }
 
     /**
@@ -367,10 +356,7 @@ export class Context {
      */
     isExternalFile(fileName: string) {
         let isExternal = !this.fileNames.includes(fileName);
-        if (!isExternal && this.externalPattern) {
-            isExternal = this.externalPattern.some(mm => mm.match(fileName));
-        }
-        return isExternal;
+        return (isExternal || fileName.includes('node_modules'));
     }
 
     /**

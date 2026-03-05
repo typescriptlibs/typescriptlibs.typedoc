@@ -8,7 +8,6 @@ import { ConverterComponent, ConverterNodeComponent, ConverterTypeComponent, Typ
 import { Component, ChildableComponent, ComponentClass } from '../utils/component';
 import { BindOption } from '../utils';
 import { normalizePath } from '../utils/fs';
-import { createMinimatch } from '../utils/paths';
 
 /**
  * Result structure of the [[Converter.convert]] method.
@@ -371,10 +370,8 @@ export class Converter extends ChildableComponent<Application, ConverterComponen
      */
     private compile(context: Context): ReadonlyArray<ts.Diagnostic> {
         const program = context.program;
-        const exclude = createMinimatch(this.application.exclude || []);
-        const isExcluded = (file: ts.SourceFile) => exclude.some(mm => mm.match(file.fileName));
         const includedSourceFiles = program.getSourceFiles()
-            .filter(file => !isExcluded(file));
+            .filter(file => !program.isSourceFileFromExternalLibrary(file));
 
         const errors = this.getCompilerErrors(program, includedSourceFiles);
         if (errors.length) {
