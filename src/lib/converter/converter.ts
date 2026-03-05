@@ -370,7 +370,11 @@ export class Converter extends ChildableComponent<Application, ConverterComponen
      */
     private compile(context: Context): ReadonlyArray<ts.Diagnostic> {
         const program = context.program;
-        const includedSourceFiles = program.getSourceFiles();
+        const includedSourceFiles = program.getSourceFiles()
+            .filter(file => (
+                !program.isSourceFileDefaultLibrary(file) &&
+                !program.isSourceFileFromExternalLibrary(file)
+            ));
 
         const errors = this.getCompilerErrors(program, includedSourceFiles);
         if (errors.length) {
