@@ -1,7 +1,7 @@
 {
   "name": "typescriptlibs.typedoc",
   "description": "Modified documentation generator for TSL projects.",
-  "version": "0.19.6",
+  "version": "0.19.7",
   "homepage": "https://github.com/typescriptlibs/typescriptlibs.typedoc",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
